@@ -1,6 +1,10 @@
 package com.keniareis.crud.controllers;
 
 import com.keniareis.crud.Model.Paciente;
+import com.keniareis.crud.exceptions.PacienteNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,7 +31,7 @@ public class pacienteController {
 
     //Update
     @PutMapping("/{id}")
-    public Paciente atualzarPaciente(@PathVariable UUID id, @RequestBody Paciente pacienteAtualizado){
+    public Paciente atualzarPaciente(@PathVariable UUID id, @RequestBody Paciente pacienteAtualizado) throws Exception{
         for (Paciente paciente: pacientes){
             if (paciente.getId().equals(id)){
                 paciente.setNome(pacienteAtualizado.getNome());
@@ -36,11 +40,16 @@ public class pacienteController {
                 return paciente;
             }
         }
-        return null;
+        throw new PacienteNotFoundException("Paciente com ID " + id + " nao encontrado");
     }
 
     @DeleteMapping("/{id}")
     public void deletePaciente(@PathVariable UUID id){
         pacientes.removeIf(paciente -> paciente.getId().equals(id));
+    }
+
+    @ExceptionHandler(PacienteNotFoundException.class)
+    public ResponseEntity<String> handlePatienceNotFoundException(PacienteNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }
