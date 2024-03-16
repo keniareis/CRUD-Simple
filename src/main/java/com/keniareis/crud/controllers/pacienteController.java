@@ -12,20 +12,22 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/pacientes")
+@RequestMapping("/api/pacientes")
 public class pacienteController {
-    private List<Paciente> pacientes = new ArrayList<>();
+    private ArrayList<Paciente> pacientes = new ArrayList<>();
 
     //create
     @PostMapping
-    public Paciente adicionarPaciente(@RequestBody Paciente paciente){
-        pacientes.add(paciente);
-        return paciente;
+    public Paciente adicionarPaciente(@RequestBody Paciente payload){
+        Long proximoId = (long) pacientes.size() + 1;
+        payload.setId(proximoId);
+        pacientes.add(payload);
+        return payload;
     }
 
     //read
     @GetMapping
-    public List<Paciente> listarPacientes(){
+    public ArrayList<Paciente> listarPacientes(){
         return pacientes;
     }
 

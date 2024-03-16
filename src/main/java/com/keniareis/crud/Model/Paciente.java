@@ -9,7 +9,7 @@ public class Paciente {
     private String endereco;
 
     public Paciente(UUID id, String nome, int idade, String endereco) {
-        this.id = UUID.randomUUID();
+        this.id = id;
         this.nome = nome;
         this.idade = idade;
         this.endereco = endereco;
@@ -19,7 +19,7 @@ public class Paciente {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
